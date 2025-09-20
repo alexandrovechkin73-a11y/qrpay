@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Pay - Демо приложения</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .logo {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 20px;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+        .demo-section {
+            background: #F8FAFC;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 2px solid #E2E8F0;
+        }
+        .demo-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+        .demo-description {
+            color: #6B7280;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .demo-link {
+            display: inline-block;
+            background: #3B82F6;
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 8px;
+            transition: all 0.3s ease;
+        }
+        .demo-link:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        .demo-link.secondary {
+            background: #10B981;
+        }
+        .demo-link.secondary:hover {
+            background: #059669;
+        }
+        .instructions {
+            background: #EFF6FF;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: left;
+            border-left: 4px solid #3B82F6;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1E40AF;
+            font-size: 20px;
+        }
+        .instructions ol {
+            color: #1E40AF;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        .code-block {
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 16px 0;
+            text-align: left;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🔋</div>
+        <h1 class="title">QR Pay</h1>
+        <p class="subtitle">Демо приложения для аренды павербанков<br>с поддержкой WebView</p>
+        
+        <div class="demo-section">
+            <h3 class="demo-title">🚀 Как запустить локально</h3>
+            <p class="demo-description">Склонируйте репозиторий и запустите приложение</p>
+            
+            <div class="code-block">
+git clone https://github.com/alexandrovechkin73-ally/qrpay.git<br>
+cd qrpay<br>
+flutter pub get<br>
+flutter run -d chrome --web-port=8081
+            </div>
+            
+            <a href="https://github.com/alexandrovechkin73-ally/qrpay" class="demo-link" target="_blank">
+                📁 Открыть репозиторий
+            </a>
+            
+            <a href="test_link.html" class="demo-link secondary" target="_blank">
+                🧪 Тестовая страница
+            </a>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Возможности приложения:</h3>
+            <ol>
+                <li><strong>Система оплаты</strong> с Apple Pay и картами</li>
+                <li><strong>WebView интеграция</strong> для веб-контента</li>
+                <li><strong>Кроссплатформенность</strong> (Android, iOS, Web)</li>
+                <li><strong>Современный UI</strong> с Material Design 3</li>
+                <li><strong>Автоматическое определение платформы</strong> для WebView</li>
+            </ol>
+        </div>
+
+        <div class="status">
+            ✅ Приложение готово к тестированию!<br>
+            🌐 Веб-версия: ссылки открываются в браузере<br>
+            📱 Мобильная версия: ссылки открываются в WebView
+        </div>
+    </div>
+</body>
+</html>
