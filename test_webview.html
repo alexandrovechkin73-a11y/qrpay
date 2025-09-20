@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест WebView - QR Pay</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        .test-button {
+            width: 100%;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: #2563EB;
+            transform: translateY(-2px);
+        }
+        .info {
+            background: #F3F4F6;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+            margin-top: 24px;
+        }
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .success {
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        .error {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🔋</div>
+        <h1 class="title">QR Pay</h1>
+        <p class="subtitle">Тест WebView функциональности</p>
+        
+        <button class="test-button" onclick="testWebView()">
+            🚀 Тестировать WebView
+        </button>
+        
+        <button class="test-button" onclick="testPayment()" style="background: #10B981;">
+            💳 Тест оплаты
+        </button>
+        
+        <button class="test-button" onclick="testSupport()" style="background: #F59E0B;">
+            🆘 Поддержка
+        </button>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div class="info">
+            <strong>Инструкция:</strong><br>
+            1. Нажмите кнопку "Тестировать WebView"<br>
+            2. Должна открыться форма оплаты<br>
+            3. Проверьте навигацию и функциональность
+        </div>
+    </div>
+
+    <script>
+        function showStatus(message, isSuccess = true) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${isSuccess ? 'success' : 'error'}`;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        function testWebView() {
+            showStatus('🔄 Открытие WebView...', true);
+            
+            // Симуляция открытия WebView
+            setTimeout(() => {
+                window.open('test_payment.html', '_blank');
+                showStatus('✅ WebView открыт успешно!', true);
+            }, 1000);
+        }
+
+        function testPayment() {
+            showStatus('💳 Открытие формы оплаты...', true);
+            
+            setTimeout(() => {
+                window.open('test_payment.html', '_blank');
+                showStatus('✅ Форма оплаты открыта!', true);
+            }, 1000);
+        }
+
+        function testSupport() {
+            showStatus('🆘 Открытие поддержки...', true);
+            
+            setTimeout(() => {
+                window.open('test_payment.html', '_blank');
+                showStatus('✅ Поддержка открыта!', true);
+            }, 1000);
+        }
+
+        // Проверяем, запущено ли в Flutter WebView
+        if (window.flutter_inappwebview) {
+            showStatus('🎉 Запущено в Flutter WebView!', true);
+        } else {
+            showStatus('ℹ️ Запущено в обычном браузере', true);
+        }
+    </script>
+</body>
+</html>
