@@ -3,9 +3,7 @@ name: Deploy Static Site to GitHub Pages
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'web/**'
-      - '.github/workflows/deploy-simple.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
