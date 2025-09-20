@@ -105,36 +105,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> _simulateApplePay() async {
-    if (kIsWeb) {
-      final canPay = await ApplePayService.canMakePayments();
-      if (canPay) {
-        final result = await ApplePayService.requestPayment(
-          amount: '4.99',
-          currency: 'USD',
-          merchantId: 'merchant.com.qrpay.demo',
-        );
-        
-        if (result != null && result['success'] == true) {
-          setState(() {
-            _paymentToken = result['paymentToken'];
-          });
-          _processPayment();
-        } else {
-          setState(() {
-            _errorMessage = 'Apple Pay недоступен';
-          });
-        }
-      } else {
-        setState(() {
-          _errorMessage = 'Apple Pay не поддерживается на этом устройстве';
-        });
-      }
-    } else {
-      setState(() {
-        _paymentToken = 'apple_pay_token_${DateTime.now().millisecondsSinceEpoch}';
-      });
-      _processPayment();
-    }
+    // В WebView Apple Pay не поддерживается, поэтому используем обычную симуляцию
+    setState(() {
+      _paymentToken = 'apple_pay_token_${DateTime.now().millisecondsSinceEpoch}';
+    });
+    _processPayment();
   }
 
   void _simulateCardPayment() {
