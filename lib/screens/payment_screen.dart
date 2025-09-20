@@ -168,7 +168,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const WebViewScreen(
-                    url: 'https://localhost:8080',
+                    url: 'https://alexandrovechkin73-a11y.github.io/qrpay',
                     title: 'QR Pay - Веб-версия',
                   ),
                 ),
