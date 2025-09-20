@@ -1,43 +1,239 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Pay - Аренда павербанка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="QR Pay - Аренда павербанка">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        h1 {
+            color: #1F2937;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="QR Pay">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+        .subtitle {
+            color: #6B7280;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
 
-  <!-- Apple Pay -->
-  <meta name="apple-pay-capable" content="true">
-  <meta name="apple-pay-supported-networks" content="visa, masterCard, amex">
+        .price-container {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+        .price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 5px;
+        }
 
-  <title>QR Pay - Аренда павербанка</title>
-  <link rel="manifest" href="manifest.json">
+        .old-price {
+            font-size: 18px;
+            color: #9CA3AF;
+            text-decoration: line-through;
+            margin-bottom: 10px;
+        }
+
+        .discount {
+            background: #10B981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .features {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            background: #10B981;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #9CA3AF;
+            font-size: 14px;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #F3F4F6;
+            border-radius: 12px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .price {
+                font-size: 32px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+    <div class="container">
+        <div class="logo">QR</div>
+        
+        <h1>QR Pay</h1>
+        <p class="subtitle">Аренда павербанка</p>
+        
+        <div class="price-container">
+            <div class="price">$4.99</div>
+            <div class="old-price">$9.99</div>
+            <div class="discount">50% скидка</div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Безлимитная аренда на месяц</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Более 1000 станций по городу</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Быстрая зарядка за 30 минут</span>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✓</div>
+                <span>Поддержка 24/7</span>
+            </div>
+        </div>
+        
+        <div class="qr-code">
+            QR код для<br>сканирования
+        </div>
+        
+        <button class="cta-button" onclick="handlePayment()">
+            Подписаться за $4.99
+        </button>
+        
+        <div class="footer">
+            <p>Первый месяц со скидкой 50%</p>
+            <p>Отменить можно в любое время</p>
+        </div>
+    </div>
+
+    <script>
+        function handlePayment() {
+            // В реальном приложении здесь будет обработка платежа
+            alert('Платеж обрабатывается...\n\nВ демо-версии это имитация платежа.');
+            
+            // Имитация успешного платежа
+            setTimeout(() => {
+                alert('Платеж успешно обработан!\n\nВаш павербанк готов к использованию.');
+            }, 2000);
+        }
+
+        // Добавляем интерактивность
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.cta-button');
+            
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
 </body>
 </html>

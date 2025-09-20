@@ -144,18 +144,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     _processPayment();
   }
 
-  void _openWebViewPayment() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const WebViewScreen(
-          url: 'web/test_webview.html',
-          title: 'Оплата картой',
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,6 +160,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.web, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WebViewScreen(
+                    url: 'https://localhost:8080',
+                    title: 'QR Pay - Веб-версия',
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark,
@@ -296,7 +300,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     width: double.infinity,
                     height: 50,
                     child: TextButton(
-                      onPressed: _openWebViewPayment,
+                      onPressed: _simulateCardPayment,
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.black,
                         backgroundColor: Colors.transparent,
@@ -358,38 +362,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               
               Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WebViewScreen(
-                          url: 'web/test_webview.html',
-                          title: 'Поддержка',
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text.rich(
-                    TextSpan(
-                      text: 'Nothing happened? ',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xFF9CA3AF),
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Contact support',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xFF3B82F6),
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ],
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Nothing happened? ',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF9CA3AF),
                     ),
+                    children: [
+                      TextSpan(
+                        text: 'Contact support',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF3B82F6),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

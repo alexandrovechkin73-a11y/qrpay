@@ -42,7 +42,6 @@ class DeepLinkHandler extends StatefulWidget {
 
 class _DeepLinkHandlerState extends State<DeepLinkHandler> {
   String? _stationId;
-  String? _url;
   bool _isLoading = true;
 
   @override
@@ -53,7 +52,6 @@ class _DeepLinkHandlerState extends State<DeepLinkHandler> {
 
   void _handleDeepLink() {
     Future.delayed(const Duration(seconds: 1), () {
-      // Для демонстрации используем обычный flow с stationId
       const testStationId = 'RECH082203000350';
       
       setState(() {
@@ -88,7 +86,6 @@ class _DeepLinkHandlerState extends State<DeepLinkHandler> {
         ),
       );
     }
-
 
     if (_stationId == null) {
       return Scaffold(
@@ -137,6 +134,30 @@ class _DeepLinkHandlerState extends State<DeepLinkHandler> {
                   ),
                 ),
                 child: const Text('Повторить'),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WebViewScreen(
+                        url: 'https://localhost:8080',
+                        title: 'QR Pay - Веб-версия',
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF3B82F6),
+                  side: const BorderSide(color: Color(0xFF3B82F6)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                ),
+                child: const Text('Открыть веб-версию'),
               ),
             ],
           ),
