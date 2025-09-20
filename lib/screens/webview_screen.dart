@@ -27,7 +27,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeWebView();
+    // Для веб-платформы не инициализируем WebView
+    if (!kIsWeb) {
+      _initializeWebView();
+    } else {
+      _openUrlInBrowser();
+    }
   }
 
   void _initializeWebView() {
