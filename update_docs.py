@@ -8,7 +8,10 @@ import os
 from pathlib import Path
 
 def update_docs():
+    # Предпочитаем продовую Flutter-сборку, если она есть
+    build_web_dir = Path("build/web")
     web_dir = Path("web")
+    source_dir = build_web_dir if build_web_dir.exists() else web_dir
     docs_dir = Path("docs")
     
     print("🔄 Обновляем папку docs для GitHub Pages...")
@@ -16,7 +19,7 @@ def update_docs():
     # Создаем папку docs если её нет
     docs_dir.mkdir(exist_ok=True)
     
-    # Полностью синхронизируем содержимое web -> docs (включая подкаталоги)
+    # Полностью синхронизируем содержимое source -> docs (включая подкаталоги)
     # 1) Удаляем старые файлы (кроме README.md)
     for dest_child in docs_dir.iterdir():
         if dest_child.name == "README.md":
@@ -27,8 +30,8 @@ def update_docs():
             shutil.rmtree(dest_child)
 
     # 2) Копируем все содержимое рекурсивно
-    for root, dirs, files in os.walk(web_dir):
-        rel_root = Path(root).relative_to(web_dir)
+    for root, dirs, files in os.walk(source_dir):
+        rel_root = Path(root).relative_to(source_dir)
         target_root = docs_dir / rel_root
         target_root.mkdir(parents=True, exist_ok=True)
         for file_name in files:
