@@ -64,31 +64,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
 
     try {
-      // 1) Привязываем платёжный метод
-      await _apiService.addPaymentMethod(_paymentToken!);
-
-      // 2) Создаём подписку
-      await _apiService.createSubscription(
-        paymentToken: _paymentToken!,
-      );
-
-      final rentResponse = await _apiService.rentPowerBank(
-        stationId: widget.stationId,
-      );
-
+      // Пока API недоступен - симулируем успешную оплату
+      await Future.delayed(const Duration(seconds: 2));
+      
       if (mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => SuccessScreen(
-              powerBankId: rentResponse.powerBankId ?? 'PB${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
-              rentalId: rentResponse.rentalId ?? 'R${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
+              powerBankId: 'PB${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
+              rentalId: 'R${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
             ),
           ),
         );
       }
     } catch (e) {
-      print('API Error (Demo mode): $e');
+      print('Payment Error: $e');
       
       if (mounted) {
         Navigator.pushReplacement(
@@ -117,33 +108,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _simulateCardPayment() {
-    // Для веба открываем Braintree Drop-in в попапе и получаем nonce
-    if (kIsWeb) {
-      _apiService.getBraintreeToken().then((tokenResp) {
-        final token = tokenResp.token;
-        if (token == null || token.isEmpty) {
-          setState(() {
-            _errorMessage = 'Не удалось получить клиентский токен';
-          });
-          return;
-        }
-        openCardPaymentPopup(token, (nonce) {
-          setState(() {
-            _paymentToken = nonce;
-          });
-          _processPayment();
-        });
-      }).catchError((e) {
-        setState(() {
-          _errorMessage = 'Ошибка инициализации платежа: $e';
-        });
-      });
-      return;
-    }
-
-    // Невеб-платформы: пока оставим симуляцию
+    // Пока API недоступен - используем симуляцию карты для всех платформ
     setState(() {
-      _paymentToken = 'card_payment_token_${DateTime.now().millisecondsSinceEpoch}';
+      _paymentToken = 'card_nonce_${DateTime.now().millisecondsSinceEpoch}';
     });
     _processPayment();
   }
