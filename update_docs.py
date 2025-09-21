@@ -16,12 +16,26 @@ def update_docs():
     # Создаем папку docs если её нет
     docs_dir.mkdir(exist_ok=True)
     
-    # Копируем все файлы из web в docs
-    for file_path in web_dir.glob("*"):
-        if file_path.is_file():
-            dest_path = docs_dir / file_path.name
-            shutil.copy2(file_path, dest_path)
-            print(f"✅ Скопирован: {file_path.name}")
+    # Полностью синхронизируем содержимое web -> docs (включая подкаталоги)
+    # 1) Удаляем старые файлы (кроме README.md)
+    for dest_child in docs_dir.iterdir():
+        if dest_child.name == "README.md":
+            continue
+        if dest_child.is_file():
+            dest_child.unlink()
+        elif dest_child.is_dir():
+            shutil.rmtree(dest_child)
+
+    # 2) Копируем все содержимое рекурсивно
+    for root, dirs, files in os.walk(web_dir):
+        rel_root = Path(root).relative_to(web_dir)
+        target_root = docs_dir / rel_root
+        target_root.mkdir(parents=True, exist_ok=True)
+        for file_name in files:
+            src_path = Path(root) / file_name
+            dst_path = target_root / file_name
+            shutil.copy2(src_path, dst_path)
+            print(f"✅ Скопирован: {dst_path.relative_to(docs_dir)}")
     
     print("🎉 Обновление завершено!")
     print("💡 Теперь можно коммитить изменения для деплоя на GitHub Pages")
