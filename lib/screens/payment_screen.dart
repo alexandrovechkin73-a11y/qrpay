@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/api_service.dart';
 import '../services/apple_pay_service.dart';
 import 'success_screen.dart';
-import 'webview_screen.dart';
+// Use web bridge on web; provide empty stub elsewhere
+import '../web/card_payment_bridge.dart'
+    if (dart.library.io) '../web/card_payment_bridge_stub.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String stationId;
@@ -62,8 +64,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
 
     try {
-      await Future.delayed(const Duration(seconds: 2));
-      
+      // 1) Привязываем платёжный метод
+      await _apiService.addPaymentMethod(_paymentToken!);
+
+      // 2) Создаём подписку
       await _apiService.createSubscription(
         paymentToken: _paymentToken!,
       );
@@ -113,6 +117,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _simulateCardPayment() {
+    // Для веба открываем Braintree Drop-in в попапе и получаем nonce
+    if (kIsWeb) {
+      _apiService.getBraintreeToken().then((tokenResp) {
+        final token = tokenResp.token;
+        if (token == null || token.isEmpty) {
+          setState(() {
+            _errorMessage = 'Не удалось получить клиентский токен';
+          });
+          return;
+        }
+        openCardPaymentPopup(token, (nonce) {
+          setState(() {
+            _paymentToken = nonce;
+          });
+          _processPayment();
+        });
+      }).catchError((e) {
+        setState(() {
+          _errorMessage = 'Ошибка инициализации платежа: $e';
+        });
+      });
+      return;
+    }
+
+    // Невеб-платформы: пока оставим симуляцию
     setState(() {
       _paymentToken = 'card_payment_token_${DateTime.now().millisecondsSinceEpoch}';
     });
@@ -135,22 +164,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.web, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WebViewScreen(
-                    url: 'https://alexandrovechkin73-a11y.github.io/qrpay',
-                    title: 'QR Pay - Веб-версия',
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark,

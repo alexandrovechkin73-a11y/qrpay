@@ -84,7 +84,7 @@ class ApiService {
         final data = jsonDecode(response.body);
         return PaymentMethodResponse.fromJson(data);
       } else {
-        throw Exception('Failed to add payment method: ${response.statusCode}');
+        throw Exception('Failed to add payment method: ${response.statusCode} ${response.body}');
       }
     } catch (e) {
       throw Exception('Error adding payment method: $e');
@@ -121,7 +121,7 @@ class ApiService {
         final data = jsonDecode(response.body);
         return SubscriptionResponse.fromJson(data);
       } else {
-        throw Exception('Failed to create subscription: ${response.statusCode}');
+        throw Exception('Failed to create subscription: ${response.statusCode} ${response.body}');
       }
     } catch (e) {
       throw Exception('Error creating subscription: $e');
