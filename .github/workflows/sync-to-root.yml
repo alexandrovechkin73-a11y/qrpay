@@ -1,0 +1,57 @@
+name: Sync to Root Domain
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout qrpay
+      uses: actions/checkout@v4
+      with:
+        path: qrpay
+    
+    - name: Checkout root domain
+      uses: actions/checkout@v4
+      with:
+        repository: alexandrovechkin73-a11y/alexandrovechkin73-a11y.github.io
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: root
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    
+    - name: Build Flutter Web
+      run: |
+        cd qrpay
+        flutter clean
+        flutter pub get
+        flutter build web --release --base-href /
+    
+    - name: Sync to root domain
+      run: |
+        # Copy Flutter build to root
+        cp -r qrpay/build/web/* root/
+        
+        # Copy .well-known from qrpay to root
+        cp -r qrpay/.well-known root/
+        
+        # Copy .htaccess and _headers
+        cp qrpay/docs/.htaccess root/ 2>/dev/null || true
+        cp qrpay/docs/_headers root/ 2>/dev/null || true
+    
+    - name: Commit and push to root
+      run: |
+        cd root
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Auto-sync from qrpay: $(date)" || exit 0
+        git push
