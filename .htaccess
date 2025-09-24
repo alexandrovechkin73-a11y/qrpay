@@ -1,4 +1,0 @@
-# Apple Pay domain verification
-<Files "apple-developer-merchantid-domain-association">
-    Header set Content-Type "text/plain"
-</Files>
