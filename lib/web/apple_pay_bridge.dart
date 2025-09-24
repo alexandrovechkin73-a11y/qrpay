@@ -43,6 +43,22 @@ class ApplePayWeb {
     }
 
     try {
+      // Calculate total from line items
+      double total = 0.0;
+      for (var item in lineItems) {
+        if (item['type'] == 'final') {
+          total += double.parse(item['amount'].toString());
+        }
+      }
+      
+      // Add total to line items
+      final allLineItems = List<Map<String, dynamic>>.from(lineItems);
+      allLineItems.add({
+        'type': 'final',
+        'label': 'Total',
+        'amount': total.toStringAsFixed(2),
+      });
+
       final session = js.JsObject(js.context['ApplePaySession'], [
         '3.0',
         js.JsObject.jsify({
@@ -51,7 +67,11 @@ class ApplePayWeb {
           'currencyCode': currencyCode,
           'supportedNetworks': ['visa', 'masterCard', 'amex'],
           'merchantCapabilities': ['supports3DS'],
-          'lineItems': lineItems,
+          'lineItems': allLineItems,
+          'total': {
+            'label': 'QR Pay',
+            'amount': total.toStringAsFixed(2),
+          },
         })
       ]);
 
