@@ -45,14 +45,14 @@ class ApplePayWeb {
     try {
       final session = js.JsObject(js.context['ApplePaySession'], [
         '3.0',
-        {
+        js.JsObject.jsify({
           'merchantIdentifier': merchantId,
           'countryCode': countryCode,
           'currencyCode': currencyCode,
           'supportedNetworks': ['visa', 'masterCard', 'amex'],
           'merchantCapabilities': ['supports3DS'],
           'lineItems': lineItems,
-        }
+        })
       ]);
 
       // Handle validation
