@@ -8,6 +8,8 @@ import 'success_screen.dart';
 // Use web bridge on web; provide empty stub elsewhere
 import '../web/card_payment_bridge.dart'
     if (dart.library.io) '../web/card_payment_bridge_stub.dart';
+import '../web/apple_pay_bridge.dart'
+    if (dart.library.io) '../web/apple_pay_bridge_stub.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String stationId;
@@ -100,11 +102,49 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> _simulateApplePay() async {
-    // В WebView Apple Pay не поддерживается, поэтому используем обычную симуляцию
-    setState(() {
-      _paymentToken = 'apple_pay_token_${DateTime.now().millisecondsSinceEpoch}';
-    });
-    _processPayment();
+    if (kIsWeb) {
+      // Проверяем доступность Apple Pay в вебе
+      final isAvailable = ApplePayWeb.isAvailable;
+      final canMakePayments = await ApplePayWeb.canMakePayments();
+      
+      if (!isAvailable || !canMakePayments) {
+        setState(() {
+          _errorMessage = 'Apple Pay недоступен в этом браузере. Используйте Safari на iOS/macOS.';
+        });
+        return;
+      }
+
+      // Запускаем Apple Pay
+      await ApplePayWeb.requestPayment(
+        merchantId: 'merchant.com.alexandrovechkin73-a11y.qrpay',
+        countryCode: 'US',
+        currencyCode: 'USD',
+        lineItems: [
+          {
+            'label': 'Monthly Subscription',
+            'amount': '4.99',
+            'type': 'final'
+          }
+        ],
+        onSuccess: (paymentData) {
+          setState(() {
+            _paymentToken = 'apple_pay_${paymentData['token']}';
+          });
+          _processPayment();
+        },
+        onError: (error) {
+          setState(() {
+            _errorMessage = 'Ошибка Apple Pay: $error';
+          });
+        },
+      );
+    } else {
+      // Для мобильных платформ используем симуляцию
+      setState(() {
+        _paymentToken = 'apple_pay_token_${DateTime.now().millisecondsSinceEpoch}';
+      });
+      _processPayment();
+    }
   }
 
   void _simulateCardPayment() {
