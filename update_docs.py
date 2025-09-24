@@ -20,9 +20,9 @@ def update_docs():
     docs_dir.mkdir(exist_ok=True)
     
     # Полностью синхронизируем содержимое source -> docs (включая подкаталоги)
-    # 1) Удаляем старые файлы (кроме README.md)
+    # 1) Удаляем старые файлы (кроме README.md и .well-known)
     for dest_child in docs_dir.iterdir():
-        if dest_child.name == "README.md":
+        if dest_child.name in ["README.md", ".well-known"]:
             continue
         if dest_child.is_file():
             dest_child.unlink()
@@ -39,6 +39,17 @@ def update_docs():
             dst_path = target_root / file_name
             shutil.copy2(src_path, dst_path)
             print(f"✅ Скопирован: {dst_path.relative_to(docs_dir)}")
+    
+    # 3) Копируем .well-known из корня проекта (если есть)
+    well_known_src = Path(".well-known")
+    if well_known_src.exists():
+        well_known_dst = docs_dir / ".well-known"
+        well_known_dst.mkdir(exist_ok=True)
+        for file_path in well_known_src.glob("*"):
+            if file_path.is_file():
+                dst_path = well_known_dst / file_path.name
+                shutil.copy2(file_path, dst_path)
+                print(f"✅ Скопирован: .well-known/{file_path.name}")
     
     print("🎉 Обновление завершено!")
     print("💡 Теперь можно коммитить изменения для деплоя на GitHub Pages")
